@@ -1,0 +1,58 @@
+version: "3.3"
+
+services:
+  #laravel-app-1:
+    #container_name: laravel-app-1
+    #build:
+      #context: ./docker/app/
+      #dockerfile: Dockerfile
+    #volumes:
+      #- "./app1:/app"
+    #depends_on:
+      #- database
+
+  laravel-prod-1:
+    container_name: laravel-prod-1
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - "./app1:/var/www"
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+
+  database:
+    container_name: database
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: "docker-rendu"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  phpmyadmin:
+    container_name: db-pma
+    image: phpmyadmin/phpmyadmin
+    links:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_USER: user
+      PMA_PASSWORD: password
+      PMA_ARBITRARY: 1
+    restart: unless-stopped
+    ports:
+      - 8080:80
+
+volumes:
+  db-data:

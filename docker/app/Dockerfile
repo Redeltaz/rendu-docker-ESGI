@@ -1,12 +1,6 @@
 FROM php:8.1 AS container-setup
 
-#ARG APP_NAME
-
 WORKDIR /app
-
-VOLUME ./app1 /app
-
-#COPY ./$APP_NAME .
 
 RUN apt update -y
 RUN apt install -y \
