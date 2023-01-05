@@ -6,6 +6,7 @@ install:
 	for app in $(app1) $(app2) ; do \
 		$(compose) $$app composer install ; \
 		$(compose) $$app npm install ; \
+		$(compose) $$app npm run build ; \
 		$(compose) $$app php artisan key:generate ; \
 		$(compose) $$app php artisan migrate:fresh ; \
     done

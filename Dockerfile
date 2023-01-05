@@ -27,4 +27,4 @@ RUN useradd -G www-data,root $user
 RUN mkdir -p /home/$user/.composer
 RUN chown -R $user:$user /home/$user
 
-USER docker-user
+USER $user

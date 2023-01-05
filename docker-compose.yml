@@ -5,15 +5,15 @@ services:
     build:
       args:
         user: docker-user
-      context: ./docker/app/
+      context: ./
       dockerfile: Dockerfile
     container_name: laravel-app-1
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./app1:/var/www
-    #networks:
-      #- docker-network
+    networks:
+      - docker-network
 
   laravel-prod-1:
     image: nginx:alpine
@@ -23,9 +23,35 @@ services:
       - "80:80"
     volumes:
       - ./app1:/var/www
-      - ./docker/nginx/app1.conf:/etc/nginx/nginx.conf
-    #networks:
-      #- docker-network
+      - ./nginx/app1.conf:/etc/nginx/nginx.conf
+    networks:
+      - docker-network
+
+  laravel-app-2:
+    build:
+      args:
+        user: docker-user
+      context: ./
+      dockerfile: Dockerfile
+    container_name: laravel-app-2
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./app2:/var/www
+    networks:
+      - docker-network
+
+  laravel-prod-2:
+    image: nginx:alpine
+    container_name: laravel-prod-2
+    restart: unless-stopped
+    ports:
+      - "81:80"
+    volumes:
+      - ./app2:/var/www
+      - ./nginx/app2.conf:/etc/nginx/nginx.conf
+    networks:
+      - docker-network
 
   database:
     image: mysql:5.7
@@ -38,8 +64,8 @@ services:
       MYSQL_ROOT_PASSWORD: "password"
     volumes:
       - db-data:/var/lib/mysql
-    #networks:
-      #- docker-network
+    networks:
+      - docker-network
 
   phpmyadmin:
     container_name: db-pma
@@ -54,12 +80,12 @@ services:
     restart: unless-stopped
     ports:
       - 8080:80
-    #networks:
-      #- docker-network
+    networks:
+      - docker-network
 
 volumes:
   db-data:
 
-#networks:
-  #docker-network:
-    #driver: bridge
+networks:
+  docker-network:
+    driver: bridge
