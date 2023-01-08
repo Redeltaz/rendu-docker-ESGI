@@ -83,8 +83,22 @@ services:
     networks:
       - docker-network
 
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    command: --admin-password "$$2y$$05$$XeF1hxCAAl0y094aX7WKk.N6TjwgKNX56HqNRwaQ9NKIY86tv0bhm"
+    ports:
+      - 9443:9443
+    networks:
+      - docker-network
+
 volumes:
   db-data:
+  portainer-data:
 
 networks:
   docker-network:

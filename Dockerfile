@@ -17,6 +17,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 FROM container-setup
 
+ARG user
+
 RUN docker-php-ext-install pdo pdo_mysql 
 RUN docker-php-ext-enable pdo pdo_mysql
 
